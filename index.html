@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+<<<<<<< Updated upstream
+		<title>reveal.js – The HTML Presentation Framework</title>
+=======
+		<title>NixOS loves k8s</title>
+>>>>>>> Stashed changes
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Font awesome -->
+		<link rel="stylesheet" href="lib/css/font-awesome.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section data-background="./images/kubernetes-nixos.png">
+					<h1 style="text-shadow: 2px 2px 10px rgba(0, 0, 0, 1);">NixOS <i class="fa fa-heart-o"></i> k8s</h1>
+					<p>
+						<p style="text-shadow: 2px 2px 10px rgba(0, 0, 0, 1);">Created by <a href="http://jakahudoklin.com">Jaka Hudoklin</a> / <a href="http://twitter.com/offlinehacker">@offlinehacker</a></p>
+					</p>
+					<aside class="notes">
+						Welcome to my talk about running kubernetes on nixos, i'm
+						Jaka Hudoklin and will talk about why nixos and kubernetes
+						are a great combination.
+					</aside>
+				</section>
+
+				<section>
+					<section  data-background="./nixos-logo-only-hires.png">
+						<h2><i class="fa fa-home"></i> About me?</h2>
+						<div style="display: flex;">
+							<img width=200 height=200 data-src="./images/jaka.png" style="border-radius: 200px;"/>
+							<p>
+								Fullstack software engeneer in javascript, python, c, nix and more, with experiences in web technologies,
+								system provisioning, embedded devices and security.
+							</p>
+						</div>
+						<aside class="notes">
+							Lately i'm manly javascript backend developer, but i'm interested and involved in wide spectrum
+							of it fields. One day i'm fixing bugs of incompetent frontend developers and other days i'm
+							doing some low level hardware programming.
+						</aside>
+					</section>
+					<section>
+						<h2><i class="fa fa-spinner"> Projects</i></h2>
+						<div style="display: flex;">
+							<p style="text-align: left;">
+								<a href="http://gatehub.net">http://gatehub.net</a>:
+								new fintech platform for multy currency
+								payments, trading and exchange based on ripple
+							</p>
+							<img src="images/gatehub.png" ></img>
+						</div>
+						<div style="display: flex;">
+							<img src="images/proteansec.png" width=200px height=200px></img>
+							<p style="text-align: right;">
+								Data driven distributed task automation and data agregation framework
+								using graph databases and docker containers and nix.
+							</p>
+						</div>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h3>Question is how can we scale (nix) applications in production?</h3>
+						<p>How to deploy:</p>
+					  </br>
+						<ul>
+							<li>... scalabe nixos systems?</li>
+							<li>... scalabe apps on top of nixos?</li>
+							<li>... scalable and reliable distributed storage?</li>
+							<li>... scalable monitoring system?</li>
+						</ul>
+						<aside class="notes">
+							When i started working on gatehub we decided that we want to split
+							out architecture in many microservices. We also started thinking how can we
+							deploy scalable infrastructure. Our developers wanted to use docker
+							to develop, build and deploy applications. I still wanted to keep
+							using nixos and nixpackages for our deployments.
+						</aside>
+					</section>
+					<section>
+						<h2>What do we need?</h2>
+						<ul>
+							<li>Cluster process manager</li>
+							<li>Secure distributed overlay networking</li>
+							<li>Load balancer</li>
+							<li>Distributed and replicated storage</li>
+							<li>Scheduler for resources like storage, processing power, networking, ...</li>
+							<li>Cluster manager</li>
+              <li>Monitoring system</li>
+						</ul>
+					</section>
+					<section>
+<<<<<<< Updated upstream
+						<h2>Basement Level 2</h2>
+						<p>That's it, time to go back up.</p>
+						<br>
+						<a href="#/2">
+							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
+						</a>
+=======
+						<h2>(Container) service managers</h2>
+						<ul>
+							<li>systemd (nspawn)</li>
+							<li>docker</li>
+							<li>rocket</li>
+							<li>lxc</li>
+						</ul>
+						<aside class="notes">
+							I mix here clasical process manager and container base process
+							managers, but the only difference is that container based process
+							managers starts your processes inside linux namespaces.
+							Of course your process can be a whole new linux distro that you
+							start in container.
+
+							<ul>
+								<li>
+									You use systemd everyday, so i will not spend to much time
+									with it, but some of you might not know that systemd comes with
+									container manager command called systemd-nspawn.
+								</li>
+								<li>
+									Main advantage of docker is that it is user friendly and
+									provides hub of premade docker app containers.
+
+									It has simple
+									and well defined format for building containers, which is many
+									cases too simple to build complexer images
+
+									It's the first
+									container manager with idea of running one app per container
+									and not the whole os.
+
+									This separation of processes provides
+									options for great scalability.
+
+									It is also based around idea of stackable overlay filesystems
+									that provide a way for deduplication and sharing of docker images.
+						</aside>
+					</section>
+					<section>
+						<h2>Overlay networking</h2>
+						<ul>
+							<li>openvswitch</li>
+							<li>wave</li>
+							<li>flanner</li>
+							<li>libnetwork</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Distributed and replicated storage</h2>
+						<ul>
+							<li>ceph</li>
+							<li>glusterfs</li>
+							<li>xtremefs</li>
+							<li>In cloud reliable storage like amazon ebs</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Avaliable container cluster managers</h2>
+						<ul>
+							<li>google kubernetes</li>
+							<li>coreos fleet</li>
+							<li>docker swarm</li>
+							<li>dokku</li>
+							<li>rancher</li>
+						</ul>
+						<p>Many more avalible here:
+							<a href="http://stackoverflow.com/questions/18285212/how-to-scale-docker-containers-in-production">http://stackoverflow.com/questions/18285212/how-to-scale-docker-containers-in-production</a>
+						</p>
+						<aside class="notes">
+							<ul>
+								<li>
+									The only cluster manager which does not primarily use docker.
+									Spawns distributed processes as systemd services
+								</li>
+								<li>
+									This is a solution docker is working on and is currently
+									still in development phase.
+								</li>
+							</ul>
+
+							By the way, have you seen that everything now is written in go,
+							wouldn't it be really awesome to rewrite nix in go?
+						<aside>
+>>>>>>> Stashed changes
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Docker and nix</h2>
+						<ul>
+							<li>Primarily used for running applications, not whole distros</li>
+							<li>Running nix inside docker is easy</li>
+							<li>
+								A few benefits compared to other docker images, you can pick
+								exact versions of packages you want to run.
+							</li>
+						</ul>
+						<pre><code>$ cat Dockerfile
+FROM nixos/nix:1.10
+RUN nix-channel --add http://nixos.org/releases/nixpkgs/nixpkgs-16.03pre71923.3087ef3/ dev
+RUN nix-channel --update
+RUN nix-env -iA dev.nginx
+ADD nginx.conf nginx.conf
+CMD nginx -c $PWD/nginx.conf -g 'daemon off;'
+$ docker build -t offlinehacker/nginx .
+$ docker run -ti -p 80:80 offlinehacker/nginx</code></pre>
+					</section>
+					<section>
+						<h2>What about running nixos in docker?</h2>
+						<p>You can run nixos inside docker containers using <b>--privileged</b> mode</p>
+						<p>... but, you don't want to do that</p>
+						<p>
+							Working implementation of service abstraction layer is in progress,
+							but currently not on my priority list
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2><i class="fa fa-cloud"></i> Kubernetes project</h2>
+						<p>Distributed cluster manager for docker containers</p>
+						<ul>
+							<li>First announced and opensourced in 2014 by google</li>
+							<li>Influenced by Google's Borg system</li>
+							<li>Written in go</li>
+							<li>Uses docker as primary process manager</li>
+							<li>Support for rocket</li>
+							<li>~20.000 commits, 555 contributors</li>
+							<li>Currently stable release 1.1.1</li>
+						</ul>
+					</section>
+					<section>
+<<<<<<< Updated upstream
+						<h2>Fragment Styles</h2>
+						<p>There's different types of fragments, like:</p>
+						<p class="fragment grow">grow</p>
+						<p class="fragment shrink">shrink</p>
+						<p class="fragment fade-out">fade-out</p>
+						<p class="fragment current-visible">current-visible</p>
+						<p class="fragment highlight-red">highlight-red</p>
+						<p class="fragment highlight-blue">highlight-blue</p>
+					</section>
+				</section>
+
+				<section id="transitions">
+					<h2>Transition Styles</h2>
+					<p>
+						You can select from different transitions, like: <br>
+						<a href="?transition=none#/transitions">None</a> -
+						<a href="?transition=fade#/transitions">Fade</a> -
+						<a href="?transition=slide#/transitions">Slide</a> -
+						<a href="?transition=convex#/transitions">Convex</a> -
+						<a href="?transition=concave#/transitions">Concave</a> -
+						<a href="?transition=zoom#/transitions">Zoom</a>
+					</p>
+				</section>
+
+				<section id="themes">
+					<h2>Themes</h2>
+					<p>
+						reveal.js comes with a few themes built in: <br>
+						<!-- Hacks to swap themes after the page has loaded. Not flexible and only intended for the reveal.js demo deck. -->
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/black.css'); return false;">Black (default)</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/white.css'); return false;">White</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/league.css'); return false;">League</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/sky.css'); return false;">Sky</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/beige.css'); return false;">Beige</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/simple.css'); return false;">Simple</a> <br>
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/serif.css'); return false;">Serif</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/blood.css'); return false;">Blood</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/night.css'); return false;">Night</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/moon.css'); return false;">Moon</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/solarized.css'); return false;">Solarized</a>
+					</p>
+				</section>
+
+=======
+						<h2>Provides:</h2>
+						<ul>
+							<li>Replication</li>
+							<li>Load balancing</li>
+							<li>Integration with distributed storage (ebs, ceph, glusterfs, nfs, ...)</li>
+							<li>Resource quotas</li>
+							<li>Logging and monitoring</li>
+							<li>Declarative configuration</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Separation of components into microservices:</h2>
+						<ul>
+							<li><b>kube-apisever:</b> http api service</li>
+							<li><b>kube-controller-manager:</b> managment of resource</li>
+							<li><b>kube-scheduler:</b> scheduling of resources like servers and storage</li>
+							<li><b>kube-proxy:</b> load balancing proxy</li>
+              <li><b>kubelet:</b> container managment and reporting on minions</li>
+						</ul>
+					</section>
+          <section>
+            <img src="images/services.png"></img>
+          </section>
+          <section>
+            <h2>Kubernetes terms:</h2>
+            <ul>
+              <li><b>Namespace:</b> a separate group of pods, replication controllers and services</li>
+              <li><b>Minon:</b> a worker node</li>
+              <li><b>Pod:</b> a group of containers running on the same node</li>
+              <li><b>Replication controller:</b> A controller for a group of pods</li>
+              <li><b>Service:</b> Internal load balancer for a group of pods</li>
+            </ul>
+          </section>
+					<section>
+						<h1>Demo</h1>
+					</section>
+					<section>
+						<h3>Create replication controller</h3>
+						<pre>
+$ cat nginx-controller.yaml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nginx-controller
+spec:
+  replicas: 2
+  # selector identifies the set of Pods that this
+  # replication controller is responsible for managing
+  selector:
+    app: nginx
+  # podTemplate defines the 'cookie cutter' used for creating
+  # new pods when necessary
+  template:
+    metadata:
+      labels:
+        # Important: these labels need to match the selector above
+        # The api server enforces this constraint.
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: offlinehacker/nginx
+        ports:
+        - containerPort: 80
+$ kubectl create -f nginx-controller.yaml
+						</pre>
+            <aside class="notes">
+              Replication specifies the required pods and scheduling constrains.
+              While this is very simple example we can take a look in more complex
+              one. Here is an example of aws replication controller that mounts
+              ebs volumes.
+            </aside>
+					</section>
+          <section>
+            <h3>Expose created pods using load balancer</h3>
+            <pre>
+$ cat nginx-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  ports:
+  - port: 8000 # the port that this service should serve on
+    # the container on each pod to connect to, can be a name
+    # (e.g. 'www') or a number (e.g. 80)
+    targetPort: 80
+    protocol: TCP
+  # just like the selector in the replication controller,
+  # but this time it identifies the set of pods to load balance
+  # traffic to.
+  selector:
+    app: nginx
+$ kubectl create -f nginx-service.yaml
+            </pre>
+            <aside class="notes">
+              Kubernetes always exposes services via load balancer, also connections
+              betwene services themselves go via load balancer. What internally
+              kubernetes does is create NAT iptables rules to reroute traffic to
+              kube-proxy service that proxies all the traffic to all avalible services.
+            </aside>
+          </section>
+					<section>
+						<h2>Some additional commands</h2>
+						<pre><code>$ kubectl get nodes
+$ kubectl get pods
+$ kubectl logs nginx-controller-c5sik
+$ kubectl exec -t -i -p nginx-controller-c5sik -c nginx -- sh</code></pre>
+					</section>
+				</section>
+>>>>>>> Stashed changes
+				<section>
+					<section>
+						<h2>Running kubernetes on nixos</h2>
+						<p>There is a nixos module created and maintained by me<p>
+						<p>
+							It's deployed in production for longer period of time,
+							till now without any bigger issues
+						</p>
+					</section>
+<<<<<<< Updated upstream
+					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png">
+						<h2>Image Backgrounds</h2>
+						<pre><code class="hljs">&lt;section data-background="image.png"&gt;</code></pre>
+					</section>
+					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png" data-background-repeat="repeat" data-background-size="100px">
+						<h2>Tiled Backgrounds</h2>
+						<pre><code class="hljs" style="word-wrap: break-word;">&lt;section data-background="image.png" data-background-repeat="repeat" data-background-size="100px"&gt;</code></pre>
+					</section>
+					<section data-background-video="https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.mp4,https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.webm" data-background-color="#000000">
+						<div style="background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px;">
+							<h2>Video Backgrounds</h2>
+							<pre><code class="hljs" style="word-wrap: break-word;">&lt;section data-background-video="video.mp4,video.webm"&gt;</code></pre>
+						</div>
+					</section>
+					<section data-background="http://i.giphy.com/90F8aUepslB84.gif">
+						<h2>... and GIFs!</h2>
+					</section>
+				</section>
+
+				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+					<h2>Background Transitions</h2>
+					<p>
+						Different background transitions are available via the backgroundTransition option. This one's called "zoom".
+					</p>
+					<pre><code class="hljs">Reveal.configure({ backgroundTransition: 'zoom' })</code></pre>
+				</section>
+
+				<section data-transition="slide" data-background="#b5533c" data-background-transition="zoom">
+					<h2>Background Transitions</h2>
+					<p>
+						You can override background transitions per-slide.
+					</p>
+					<pre><code class="hljs" style="word-wrap: break-word;">&lt;section data-background-transition="zoom"&gt;</code></pre>
+				</section>
+
+				<section>
+					<h2>Pretty Code</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+function linkify( selector ) {
+  if( supports3DTransforms ) {
+
+    var nodes = document.querySelectorAll( selector );
+
+    for( var i = 0, len = nodes.length; i &lt; len; i++ ) {
+      var node = nodes[i];
+
+      if( !node.className ) {
+        node.className += ' roll';
+      }
+    }
+  }
+}
+					</code></pre>
+					<p>Code syntax highlighting courtesy of <a href="http://softwaremaniacs.org/soft/highlight/en/description/">highlight.js</a>.</p>
+				</section>
+
+				<section>
+					<h2>Marvelous List</h2>
+=======
+					<section>
+						<h2>A few lines of nixos config</h2>
+						<pre><code data-trim>
+bridges = {
+	cbr0.interfaces = [ ];
+};
+interface = {
+	cbr0 = {
+		ipAddress = "10.10.0.1";
+		prefixLength = 24;
+	};
+};
+services.kubernetes.roles = ["master" "node"];
+virtualisation.docker.extraOptions =
+	''--iptables=false --ip-masq=false -b cbr0'';
+						</code></pre>
+						<p>This enables kubernetes with all the services you need for single node kubernetes</p>
+            <aside class="notes">
+              This enables all kubernetes services and additionally enables
+              etcd, because kubernetes depends on etcd and skydns as cluster dependencies
+              service.
+            </aside>
+					</section>
+          <section>
+            <h2>Running kubernetes in production</h2>
+            <p>
+              For production environments we need at least a cluster of three
+              machines of which one of the machines is master
+            </p>
+            <p>All machines need to be connected and have routable subnets</p>
+          </section>
+          <section>
+            <h2>How we do it?</h2>
+            <ul>
+              <li>Several aws instances in VPC</li>
+              <li>Deployment with nixops</li>
+              <li>Overlay ipsec networking with openvswitch</li>
+              <li>EBS as storage</li>
+              <li>Separate production and development namespaces</li>
+            </ul>
+          </section>
+          <section>
+            <img src="images/inproduction.png"/>
+          </section>
+					<section>
+						<h2>Monitoring</h2>
+						<ul>
+							<li>Collectd for metrics agregation</li>
+							<li>Influxdb for metrics storage</li>
+							<li>Grafana as dashboard for metrics vizualizations</li>
+							<li>Bosun for alerting</li>
+							<li>Heapster for kubernetes monitoring</li>
+							<li>Grafana and kibana for agregation and vizualization of logs</li>
+						</ul>
+						<aside class="notes">
+							will be replaced by native grafana logging when released
+						</aside>
+					</section>
+          <section>
+            <h2>Configuration?</h2>
+            <p>
+              I have developed a set of reusable nixos profiles that you can
+              simply include in your configuration.
+							They are avalible on <a href="https://github.com/offlinehacker/x-truder.net">https://github.com/offlinehacker/x-truder.net</a>
+							<p/>
+							... they still need a better documentation
+            </p>
+          </section>
+				</section>
+
+				<section>
+					<h2 style="text-shadow: 2px 2px 10px rgba(0, 0, 0, 1);">EOF <i class="fa fa-question"></i></h2>
+					</br>
+					<p>My social media and sites:</p>
+>>>>>>> Stashed changes
+					<ul>
+						<li><b>github:</b> <a href="github.com/offlinehacker">github.com/offlinehacker</a></li>
+						<li><b>twitter:</b> <a style="text-shadow: 2px 2px 10px rgba(0, 0, 0, 1);">@offlinehacker</a></li>
+						<li><b>irc:</b> offlinehacker@freenode</li>
+						<li><b>www:</b> http://www.jakahudoklin.com</li>
+					</ul>
+				</section>
+<<<<<<< Updated upstream
+
+				<section>
+					<h2>Fantastic Ordered List</h2>
+					<ol>
+						<li>One is smaller than...</li>
+						<li>Two is smaller than...</li>
+						<li>Three!</li>
+					</ol>
+				</section>
+
+				<section>
+					<h2>Tabular Tables</h2>
+					<table>
+						<thead>
+							<tr>
+								<th>Item</th>
+								<th>Value</th>
+								<th>Quantity</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Apples</td>
+								<td>$1</td>
+								<td>7</td>
+							</tr>
+							<tr>
+								<td>Lemonade</td>
+								<td>$2</td>
+								<td>18</td>
+							</tr>
+							<tr>
+								<td>Bread</td>
+								<td>$3</td>
+								<td>2</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section>
+					<h2>Clever Quotes</h2>
+					<p>
+						These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
+						&ldquo;The nice thing about standards is that there are so many to choose from&rdquo;</q> and block:
+					</p>
+					<blockquote cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
+						&ldquo;For years there has been a theory that millions of monkeys typing at random on millions of typewriters would
+						reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue.&rdquo;
+					</blockquote>
+				</section>
+
+				<section>
+					<h2>Intergalactic Interconnections</h2>
+					<p>
+						You can link between slides internally,
+						<a href="#/2/3">like this</a>.
+					</p>
+				</section>
+
+				<section>
+					<h2>Speaker View</h2>
+					<p>There's a <a href="https://github.com/hakimel/reveal.js#speaker-notes">speaker view</a>. It includes a timer, preview of the upcoming slide as well as your speaker notes.</p>
+					<p>Press the <em>S</em> key to try it out.</p>
+
+					<aside class="notes">
+						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+					</aside>
+				</section>
+
+				<section>
+					<h2>Export to PDF</h2>
+					<p>Presentations can be <a href="https://github.com/hakimel/reveal.js#pdf-export">exported to PDF</a>, here's an example:</p>
+					<iframe src="https://www.slideshare.net/slideshow/embed_code/42840540" width="445" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
+				</section>
+
+				<section>
+					<h2>Global State</h2>
+					<p>
+						Set <code>data-state="something"</code> on a slide and <code>"something"</code>
+						will be added as a class to the document element when the slide is open. This lets you
+						apply broader style changes, like switching the page background.
+					</p>
+				</section>
+
+				<section data-state="customevent">
+					<h2>State Events</h2>
+					<p>
+						Additionally custom events can be triggered on a per slide basis by binding to the <code>data-state</code> name.
+					</p>
+					<pre><code class="javascript" data-trim contenteditable style="font-size: 18px;">
+Reveal.addEventListener( 'customevent', function() {
+	console.log( '"customevent" has fired' );
+} );
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Take a Moment</h2>
+					<p>
+						Press B or . on your keyboard to pause the presentation. This is helpful when you're on stage and want to take distracting slides off the screen.
+					</p>
+				</section>
+
+				<section>
+					<h2>Much more</h2>
+					<ul>
+						<li>Right-to-left support</li>
+						<li><a href="https://github.com/hakimel/reveal.js#api">Extensive JavaScript API</a></li>
+						<li><a href="https://github.com/hakimel/reveal.js#auto-sliding">Auto-progression</a></li>
+						<li><a href="https://github.com/hakimel/reveal.js#parallax-background">Parallax backgrounds</a></li>
+						<li><a href="https://github.com/hakimel/reveal.js#keyboard-bindings">Custom keyboard bindings</a></li>
+					</ul>
+				</section>
+
+				<section style="text-align: left;">
+					<h1>THE END</h1>
+					<p>
+						- <a href="http://slides.com">Try the online editor</a> <br>
+						- <a href="https://github.com/hakimel/reveal.js">Source code &amp; documentation</a>
+					</p>
+				</section>
+
+=======
+>>>>>>> Stashed changes
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			history: true,
+			center: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+<<<<<<< Updated upstream
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+=======
+			dependencies: [
+			{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+			{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+			{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+				{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'socket.io/socket.io.js', async: true },
+						{ src: 'plugin/notes-server/client.js', async: true }
+			]
+		});
+>>>>>>> Stashed changes
+
+		</script>
+
+	</body>
+</html>
